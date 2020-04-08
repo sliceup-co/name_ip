@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "Use with Ubuntu 18 or higher"
 #Enter Fist IP address that you want users to use for static IP
 frange="10.12.2.40"
 
@@ -24,8 +24,28 @@ echo -e "\e[96m"
 
 # get new hostname from user
 echo "Type in Hostname and hit enter"
-
 read hostname
+
+echo "Do you want to configure Static IP? Select n to leave as DHCP [Y/n]"
+
+read a
+	if [ "$a" = "Y" ] || [ "$a" = "y" ]; then
+	 
+         sudo hostnamectl set-hostname $hostname
+
+	elif [ "$a" = "N" ] || [ "$a" = "n" ]; then
+	 
+	 echo "Changing name, dhcp-identifier, and exiting"
+         sudo hostnamectl set-hostname $hostname
+         sudo sed -i '/dhcp4: true/a \ \dhcp-identifier: mac' /etc/netplan/50-cloud-init.yaml
+         exit
+	else
+	 echo "Invalid selection. Run the script again"
+	 exit
+	fi
+
+
+
 echo
 echo "List of Open IP Addresses"
 sleep 3
@@ -90,7 +110,6 @@ read an
 
 echo "The Hostname will be $hostname"
 echo "The IP address will be $ipaddress"
-sudo hostnamectl set-hostname $hostname
 echo -e "\e[39m"
 
 
