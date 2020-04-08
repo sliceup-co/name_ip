@@ -42,6 +42,7 @@ read a
 	 echo "Changing name, dhcp-identifier, and exiting"
          sudo hostnamectl set-hostname $hostname
          sudo sed -i '/dhcp4: true/a \            \dhcp-identifier: mac' /etc/netplan/50-cloud-init.yaml
+	 echo -e "\e[39m"
          exit
 	else
 	 echo "Invalid selection. Run the script again"
