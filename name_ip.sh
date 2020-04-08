@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Use with Ubuntu 18 or higher"
+read -n 1 -r -s -p $'Ctl-c to exit or Press enter to continue...\n'
 #Enter Fist IP address that you want users to use for static IP
 frange="10.12.2.40"
 
@@ -37,7 +38,7 @@ read a
 	 
 	 echo "Changing name, dhcp-identifier, and exiting"
          sudo hostnamectl set-hostname $hostname
-         sudo sed -i '/dhcp4: true/a \ \dhcp-identifier: mac' /etc/netplan/50-cloud-init.yaml
+         sudo sed -i '/dhcp4: true/a \            \dhcp-identifier: mac' /etc/netplan/50-cloud-init.yaml
          exit
 	else
 	 echo "Invalid selection. Run the script again"
