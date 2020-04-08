@@ -40,6 +40,8 @@ read a
 	elif [ "$a" = "N" ] || [ "$a" = "n" ]; then
 	 
 	 echo "Changing name, dhcp-identifier, and exiting"
+	 echo 
+	 echo "If you are on the console, you will need to logout and log back in to see hostname changes"
          sudo hostnamectl set-hostname $hostname
          sudo sed -i '/dhcp4: true/a \            \dhcp-identifier: mac' /etc/netplan/50-cloud-init.yaml
 	 echo -e "\e[39m"
