@@ -1,5 +1,8 @@
 #!/bin/bash
+echo -e "\e[96m"
 echo "Use with Ubuntu 18 or higher"
+echo -e "\e[39m"
+
 read -n 1 -r -s -p $'Ctl-c to exit or Press enter to continue...\n'
 #Enter Fist IP address that you want users to use for static IP
 frange="10.12.2.40"
