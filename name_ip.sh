@@ -7,14 +7,15 @@ frange="10.12.2.40"
 lrange="10.12.2.150"
 
 # install fping
-sudo apt-get install fping
-
+sudo apt-get install fping -y
+sudo apt-get install sipcalc -y
 #Get current machine info
 interface=$(ifconfig -s | grep en | head -n1 | cut -d " " -f1)
 currentip=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f10)
 currentmask=$(ip -o -f inet addr show | awk '/scope global/ {print $4}' | grep -o \\/.*)
 currentdg=$(ip route | grep "default via" | sed  's/default via //g' | sed  's/dev.*//g')
 currentdns=$(systemd-resolve --status | grep "DNS Servers" | sed 's/^.*DNS Servers: //g')
+dottedmask=$(sipcalc $currentip$currentmask | grep -v "Network mask (bits)" | grep -v "Network mask (hex)" | grep mask | sed 's/^.*- //g')
 
 echo -e "\e[96m"
 
@@ -39,6 +40,10 @@ echo "The first Open IP address is $openipaddress"
 
 echo "Enter an Ip address you want to use"
 read ipaddress
+
+#calc dotted mask
+dottedmask=$(sipcalc $ipaddress$currentmask | grep -v "Network mask (bits)" | grep -v "Network mask (hex)" | grep mask | sed 's/^.*- //g')
+
 echo
 echo
 
@@ -71,7 +76,7 @@ read an
 	echo
 	echo "Enter DNS Server"
 	read dns
-
+	dottedmask=$(sipcalc $ipaddress$mask | grep -v "Network mask (bits)" | grep -v "Network mask (hex)" | grep mask | sed 's/^.*- //g')
 	else
 	 echo "Invalid selection. Run the script again"
 	 exit
@@ -124,5 +129,4 @@ echo -e "\e[39m"
 
 # Change IP address without reboot
 
-sudo ifconfig $interface $ipaddress netmask $mask ; sudo ip route add default via $dg dev $interface
-
+sudo ifconfig $interface $ipaddress netmask $dottedmask ; sudo ip route add default via $dg dev $interface
